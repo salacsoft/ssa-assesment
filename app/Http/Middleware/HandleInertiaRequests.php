@@ -27,7 +27,7 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success')
             ],
-            'auth.user' => fn () => $request->user() ? $request->user()->only('id', 'fullname', 'username', 'email') : null
+            'auth.user' => fn () => $request->user() ? $request->user()->only('id', 'fullname', 'username', 'email', 'avatar') : null
         ]);
     }
 }

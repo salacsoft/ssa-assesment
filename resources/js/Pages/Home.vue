@@ -1,12 +1,9 @@
 <template>
       <div>
          <app-header></app-header>
-         <div class="row">
-           <div class="container">
-              <div>
-                 <h2>SSA Tech Exam</h2>
-              </div>
-           </div>
+         <div class="jumbotron">
+            <h1>Joseph E. Salac</h1>
+            <p>Laravel + Vue 3 + InertiaJs</p>
          </div>
       </div>
 </template>
