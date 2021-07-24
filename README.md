@@ -1,4 +1,4 @@
-# ssa-assestment
+# SSA- Tech Assestment
 To check the Final Result checkout to develop branch
 
 # Steps
