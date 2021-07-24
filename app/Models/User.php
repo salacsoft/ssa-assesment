@@ -31,6 +31,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['avatar', 'fullname'];
+
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -67,7 +75,7 @@ class User extends Authenticatable
      */
     public function getAvatarAttribute()
     {
-        return $this->photo;
+        return $this->photo  ? url("storage/".$this->photo) : "";
     }
 
 
@@ -77,7 +85,7 @@ class User extends Authenticatable
      */
     public function getFullnameAttribute()
     {
-        return ucfirst($this->firstname) . " " . strtoupper(substr($this->middlename,0,1)) . ". " . ucfirst($this->lastname);
+        return  ucfirst($this->prefixname) .". " .ucfirst($this->firstname) . " " . strtoupper(substr($this->middlename,0,1)) . ". " . ucfirst($this->lastname) . ". " . ucfirst($this->suffixname);
     }
 
 }

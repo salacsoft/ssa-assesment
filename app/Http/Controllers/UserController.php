@@ -6,6 +6,8 @@ use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
@@ -52,5 +54,17 @@ class UserController extends Controller
         $imageName = $request->username. "." . $image->getClientOriginalExtension();
         $image->storeAs('public/',$imageName);
         return $imageName;
+    }
+
+
+    public function showUsers(Request $request)
+    {
+        $id = Auth::user()->id;
+        $users = $this->user
+            ->where("id", "!=", $id)
+            ->orderBy('id','DESC')->paginate(10);
+        return Inertia::render('User/Index', [
+            "users" => $users
+        ]);
     }
 }
