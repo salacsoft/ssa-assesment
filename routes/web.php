@@ -1,6 +1,10 @@
 <?php
 
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,4 +16,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get("/", function(){
+    return Inertia::render("Home");
+})->name("home");
+Route::get("login", [AuthController::class, "showLoginForm"])->name("showLoginForm")->middleware("guest");
+Route::post("login", [AuthController::class, "authenticate"])->name("login");
+Route::post("logout", [AuthController::class, "logout"])->name("logout");
+
+
+Route::get("register", [UserController::class, "showRegisterForm"])->name("showRegisterForm");
+Route::post("register", [UserController::class, "register"])->name("register");
 
