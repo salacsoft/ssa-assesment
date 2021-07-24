@@ -67,4 +67,30 @@ class UserController extends Controller
             "users" => $users
         ]);
     }
+
+
+    /**
+     * get user one user
+     * @param int $id
+     */
+    public function getUser($id)
+    {
+        $user = $this->user->findOrFail($id);
+        return Inertia::render('User/Show', [
+            "user" => $user
+        ]);
+    }
+
+    /**
+     * get user one user
+     * @param int $id
+     */
+    public function editUser($id)
+    {
+        $user = $this->user->findOrFail($id);
+        return Inertia::render('User/Edit', [
+            "user" => $user
+        ]);
+    }
+
 }

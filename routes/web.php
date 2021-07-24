@@ -27,4 +27,6 @@ Route::post("logout", [AuthController::class, "logout"])->name("logout");
 Route::get("register", [UserController::class, "showRegisterForm"])->name("showRegisterForm");
 Route::post("register", [UserController::class, "register"])->name("register");
 Route::get("users", [UserController::class, "showUsers"])->name("showUsers");
+Route::get("users/{id}/edit", [UserController::class, "editUser"])->name("editUser");
+Route::get("users/{id}", [UserController::class, "getUser"])->name("showUser");
 

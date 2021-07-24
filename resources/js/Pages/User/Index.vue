@@ -23,8 +23,8 @@
                      <td>{{user.username}}</td>
                      <td>{{user.email}}</td>
                      <td>
-                        <button class="btn btn-sm btn-success">Edit</button>
-                        <button class="btn btn-sm btn-danger">Remove</button>
+                        <inertia-link :href="`/users/${user.id}`" class="btn btn-sm btn-warning">Edit</inertia-link>
+                        <inertia-link :href="`/users/${user.id}`" class="btn btn-sm btn-danger">Remove</inertia-link>
                      </td>
                   </tr>
                </tbody>
