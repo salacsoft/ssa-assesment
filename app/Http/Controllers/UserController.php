@@ -116,4 +116,17 @@ class UserController extends Controller
         return Redirect::route("showUsers");
     }
 
+
+     /**
+     * get one user
+     * @param int $id
+     */
+    public function softDeleteUser(Request $request, $id)
+    {
+        $user = $this->user->findOrFail($id);
+        $user->delete();
+        $request->session()->flash('success', 'User move to inactive users (soft deleted)');
+        return Redirect::route("showUsers");
+    }
+
 }
