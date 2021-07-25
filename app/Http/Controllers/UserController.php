@@ -73,7 +73,7 @@ class UserController extends Controller
 
 
     /**
-     * get user one user
+     * get one user
      * @param int $id
      */
     public function getUser($id)
@@ -85,7 +85,7 @@ class UserController extends Controller
     }
 
     /**
-     * get user one user
+     * get one user
      * @param int $id
      */
     public function editUser($id)
@@ -94,6 +94,26 @@ class UserController extends Controller
         return Inertia::render('User/Edit', [
             "user" => $user
         ]);
+    }
+
+
+    /**
+     * update user
+     * @param App\Http\Requests\UserRequest;
+     * @param int $id
+     */
+    public function updateUser(Request $request, $id)
+    {
+        $user = $this->user->findOrFail($id);
+        $payload = $request->only($this->user->getFillable());
+        if ($request->file("photo")){
+            Log::info("with photo");
+            Log::info($request->photo);
+            $payload["photo"] = $this->uploadPhoto($request);
+        }
+        $update = $user->update($payload);
+        $request->session()->flash('success', 'User updated Successfully!');
+        return Redirect::route("showUsers");
     }
 
 }

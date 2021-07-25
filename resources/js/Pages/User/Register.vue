@@ -4,7 +4,7 @@
       <div class="row">
          <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3">
                <form method="post" @submit.prevent="submit" enctype="multipart/form-data">
-                  <h2 class="text-center">User Registration</h2>
+                  <h5 class="text-center">User Registration</h5>
                   <errors-and-messages :errors="errors"></errors-and-messages>
                   <div class="form-group">
                       <div class="row">
