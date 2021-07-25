@@ -1,26 +1,20 @@
 <template>
       <div>
          <app-header></app-header>
-         
+         <div class="row mt-2 container">
+             <errors-and-messages :errors="errors"></errors-and-messages>
+         </div>
          <div class="row mt-5 justify-content-between">
            <!-- left side -->
             <div class="col-12 col-sm-6 col-md-6 col-lg-6">
               <div class="row justify-content-start">
-                 <div class=" col-12 col-sm-4 col-md-4 col-lg-4">
+                 <div class=" col-12 col-sm-8 col-md-8 col-lg-5">
                     <inertia-link :href="$route('showRegisterForm')" class="btn btn-outline-primary form-control">
                        Create New User
                      </inertia-link>
                  </div>
                </div>
            </div>
-            <!-- right side -->
-           <div>
-
-           </div>
-         </div>
-
-         <div class="row mt-2">
-             <errors-and-messages :errors="errors"></errors-and-messages>
          </div>
          <div class="mt-2">
             <table class="table table-striped">
