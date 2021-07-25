@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -56,6 +57,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'deleted_at' => 'datetime:Y-m-d H:i A'
     ];
 
 
@@ -96,5 +98,6 @@ class User extends Authenticatable
             return $query->where("type" , "!=", "Admin");
         }
     }
+
 
 }

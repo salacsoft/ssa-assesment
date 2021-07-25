@@ -31,5 +31,6 @@ Route::get("users/{id}", [UserController::class, "getUser"])->name("showUser");
 Route::get("users/{id}/edit", [UserController::class, "editUser"])->name("editUser");
 Route::patch("users/{id}/edit", [UserController::class, "updateUser"])->name("updateUser");
 Route::delete("users/{id}/softdelete", [UserController::class, "softDeleteUser"])->name("softDeleteUser");
+Route::get("users/soft-deleted/lists", [UserController::class, "showDeletedUsers"])->name("showDeletedUsers");
 Route::redirect('/', 'users');
 

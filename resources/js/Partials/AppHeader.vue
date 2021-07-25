@@ -9,6 +9,17 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <div class="navbar-collapse collapse order-3 dual-collapse2" id="navbarSupportedContent" v-if="user">
+                <ul class="navbar-nav ml-auto row justify-content-between">
+                    <li class="nav-item" >
+                       <inertia-link :href="$route('showUsers')" class="nav-link text-white">Active Users</inertia-link>
+                    </li>
+                     <li class="nav-item" >
+                       <inertia-link :href="$route('showDeletedUsers')" class="nav-link text-white">Inactive Users</inertia-link>
+                    </li>
+                </ul>
+            </div>
+
             <div class="navbar-collapse collapse order-3 dual-collapse2" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item" v-if="!user">
@@ -42,3 +53,9 @@ export default {
     }
 }
 </script>
+
+<style>
+    .nav-item:hover {
+        text-decoration: underline;     
+    }
+</style>

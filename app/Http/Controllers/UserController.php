@@ -129,4 +129,21 @@ class UserController extends Controller
         return Redirect::route("showUsers");
     }
 
+
+    /**
+     * display all soft deleted users
+     */
+    public function showDeletedUsers()
+    {
+        $type = Auth::user()->type;
+
+        $users = $this->user
+            ->checkUserType($type)
+            ->onlyTrashed()
+            ->orderBy('id','DESC')->paginate(5);
+        return Inertia::render('User/InactiveUser', [
+            "users" => $users
+        ]);
+    }
+
 }
