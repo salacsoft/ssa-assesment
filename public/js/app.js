@@ -15084,7 +15084,9 @@ __webpack_require__.r(__webpack_exports__);
         buttons: ["Cancel", "Yes!"]
       }).then(function (value) {
         if (value) {
-          alert("delete");
+          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.delete(route('hardDelete', {
+            id: user.id
+          }));
         }
       });
     }
