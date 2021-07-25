@@ -82,11 +82,11 @@ class User extends Authenticatable
     }
 
 
-        /**
+    /**
      * setAttribute to get fullname
      * $this->fullname
      */
-    public function getFullnameAttribute()
+    public function getFullnameAttribute(): string
     {
         return  ucfirst($this->prefixname) .". " .ucfirst($this->firstname) . " " . strtoupper(substr($this->middlename,0,1)) . ". " . ucfirst($this->lastname) . ". " . ucfirst($this->suffixname);
     }
@@ -97,6 +97,16 @@ class User extends Authenticatable
         if (strtoupper($type) != "ADMIN") {
             return $query->where("type" , "!=", "Admin");
         }
+    }
+
+
+    /**
+     * setAttribute to get fullname
+     * $this->fullname
+     */
+    public function getMiddleinitialAttribute(): string
+    {
+        return  strtoupper(substr($this->middlename,0,1)) . ". ";
     }
 
 

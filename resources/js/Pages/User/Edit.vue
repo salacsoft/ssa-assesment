@@ -50,6 +50,15 @@
                      <label for="email">Email</label>
                      <input type="text" class="form-control" name="email" id="email" v-model="form.email" required />
                   </div>
+                   <div class="form-group">
+                     <label for="password">Password</label>
+                     <input type="password" class="form-control" name="password" id="password" v-model="form.password" required />
+                  </div>
+
+                  <div class="form-group">
+                     <label for="password">Re-type Password</label>
+                     <input type="password" class="form-control" name="password" id="password" v-model="form.confirm_password" required />
+                  </div>
                   <div class="row">
                      <div class="form-group col-12 col-sm-7 col-md-7 col-lg-7">
                         <label for="image">Photo</label>
@@ -109,7 +118,6 @@
                photo:null,
                password: null,
                type:null,
-               _method: "PATCH",
                _token: usePage().props.value.csrf_token
          });
          const photoPreview = null;
@@ -121,10 +129,11 @@
             if (user.hasOwnProperty(key)) {
                form[key] = user[key];
             }
+            form.photo = null;
          });
 
          function submit() {
-               Inertia.post(route('updateUser',{id: user.id}), form);
+               Inertia.patch(route('updateUser',{id: user.id}), form);
          }
 
          function selectFile($event) {

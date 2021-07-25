@@ -8,13 +8,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Services\UserServiceInterface;
 use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
     //
     protected $user;
-    public function __construct(User $user)
+    public function __construct(UserServiceInterface $user)
     {
         $this->middleware("auth")->except(["showRegisterForm","register"]);
         $this->user = $user;
@@ -35,37 +36,31 @@ class UserController extends Controller
     {
         $payload = $request->only($this->user->getFillable());
         if ($request->photo){
-            $payload["photo"] = $this->uploadPhoto($request);
+            $payload["photo"] = $this->user->upload($request->file('photo'), $payload["username"]);
         }
 
-        $this->user->create($payload);
+        $this->user->store($payload);
         $request->session()->flash('success', 'User Registered Successfully! you can sign in now');
         return Redirect::route("showLoginForm");
     }
 
 
-    /**
-     * @param App\Http\Requests\UserRequest;;
-     * @return string imagepath
-     */
-    public function uploadPhoto($request)
-    {
-        $image = $request->file('photo');
-        $imageName = $request->username. "." . $image->getClientOriginalExtension();
-        $image->storeAs('public/',$imageName);
-        return $imageName;
-    }
+    // /**
+    //  * @param App\Http\Requests\UserRequest;;
+    //  * @return string imagepath
+    //  */
+    // public function uploadPhoto($request)
+    // {
+    //     $image = $request->file('photo');
+    //     $imageName = $request->username. "." . $image->getClientOriginalExtension();
+    //     $image->storeAs('public/',$imageName);
+    //     return $imageName;
+    // }
 
 
     public function showUsers(Request $request)
     {
-        $id = Auth::user()->id;
-        $type = Auth::user()->type;
-
-        $users = $this->user
-            ->checkUserType($type)
-            ->where("id", "!=", $id)
-            ->orderBy('id','DESC')->paginate(5);
+        $users = $this->user->list();
         return Inertia::render('User/Index', [
             "users" => $users
         ]);
@@ -78,7 +73,7 @@ class UserController extends Controller
      */
     public function getUser($id)
     {
-        $user = $this->user->findOrFail($id);
+        $user = $this->user->find($id);
         return Inertia::render('User/Show', [
             "user" => $user
         ]);
@@ -90,7 +85,7 @@ class UserController extends Controller
      */
     public function editUser($id)
     {
-        $user = $this->user->findOrFail($id);
+        $user = $this->user->find($id);
         return Inertia::render('User/Edit', [
             "user" => $user
         ]);
@@ -102,16 +97,14 @@ class UserController extends Controller
      * @param App\Http\Requests\UserRequest;
      * @param int $id
      */
-    public function updateUser(Request $request, $id)
+    public function updateUser(UserRequest $request, $id)
     {
-        $user = $this->user->findOrFail($id);
         $payload = $request->only($this->user->getFillable());
         if ($request->file("photo")){
-            Log::info("with photo");
-            Log::info($request->photo);
-            $payload["photo"] = $this->uploadPhoto($request);
+            Log::info("may laman");
+            $payload["photo"] = $this->user->upload($request->file('photo'), $payload["username"]);
         }
-        $update = $user->update($payload);
+        $update = $this->user->update($id, $payload);
         $request->session()->flash('success', 'User updated Successfully!');
         return Redirect::route("showUsers");
     }
@@ -123,8 +116,7 @@ class UserController extends Controller
      */
     public function softDeleteUser(Request $request, $id)
     {
-        $user = $this->user->findOrFail($id);
-        $user->delete();
+        $this->user->destroy($id);
         $request->session()->flash('success', 'User move to inactive users (soft deleted)');
         return Redirect::route("showUsers");
     }
@@ -135,12 +127,7 @@ class UserController extends Controller
      */
     public function showDeletedUsers()
     {
-        $type = Auth::user()->type;
-
-        $users = $this->user
-            ->checkUserType($type)
-            ->onlyTrashed()
-            ->orderBy('id','DESC')->paginate(5);
+        $users = $this->user->listTrashed();
         return Inertia::render('User/InactiveUser', [
             "users" => $users
         ]);
@@ -154,8 +141,7 @@ class UserController extends Controller
      */
     public function restoreUser(Request $request, $id)
     {
-        $user = $this->user->withTrashed()->where("id", $id)->first();
-        $user->restore();
+        $this->user->restore($id);
         $request->session()->flash('success', 'User successfuly restored and back to active users');
         return Redirect::route("showDeletedUsers");
     }
@@ -167,8 +153,7 @@ class UserController extends Controller
      */
     public function hardDelete(Request $request, $id)
     {
-        $user = $this->user->withTrashed()->where("id", $id)->first();
-        $user->forceDelete();
+        $this->user->delete($id);
         $request->session()->flash('success', 'User was permanently deleted!');
         return Redirect::route("showDeletedUsers");
     }
