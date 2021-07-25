@@ -112,7 +112,7 @@
                   buttons: ["Cancel", "Yes!"],
                }).then(function(value) {
                   if (value) {
-                        alert("restore");
+                        Inertia.patch(route('restoreUser',{id: user.id}));
                   }
                });
             }

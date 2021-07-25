@@ -146,4 +146,18 @@ class UserController extends Controller
         ]);
     }
 
+
+    /**
+     * Restore soft deleted user
+     * @param int id
+     * @return Vue component with soft deleted users
+     */
+    public function restoreUser(Request $request, $id)
+    {
+        $user = $this->user->withTrashed()->where("id", $id)->first();
+        $user->restore();
+        $request->session()->flash('success', 'User successfuly restored and back to active users');
+        return Redirect::route("showDeletedUsers");
+    }
+
 }
