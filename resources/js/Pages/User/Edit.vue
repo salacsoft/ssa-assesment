@@ -116,9 +116,19 @@
                this.$refs.photo.value = null;
             }
          }
+         
+         function back(){
+            window.history.back();
+         }
 
          return {
-               form, photoPreview, clearPhotoFileInput, selectFile, submit, user
+               form, 
+               photoPreview, 
+               clearPhotoFileInput, 
+               selectFile, 
+               submit, 
+               user,
+               back
          }
       }
    }

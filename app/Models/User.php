@@ -75,7 +75,7 @@ class User extends Authenticatable
      */
     public function getAvatarAttribute()
     {
-        return $this->photo  ? url("storage/".$this->photo) : "";
+        return $this->photo  ? url("storage/".$this->photo) : url("storage/blank.png");
     }
 
 
@@ -86,6 +86,14 @@ class User extends Authenticatable
     public function getFullnameAttribute()
     {
         return  ucfirst($this->prefixname) .". " .ucfirst($this->firstname) . " " . strtoupper(substr($this->middlename,0,1)) . ". " . ucfirst($this->lastname) . ". " . ucfirst($this->suffixname);
+    }
+
+
+    public function scopeCheckUserType($query, $type)
+    {
+        if (strtoupper($type) != "ADMIN") {
+            return $query->where("type" , "!=", "Admin");
+        }
     }
 
 }

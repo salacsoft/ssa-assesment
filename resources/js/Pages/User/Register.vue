@@ -6,7 +6,7 @@
                <form method="post" @submit.prevent="submit" enctype="multipart/form-data">
                   <h2 class="text-center">User Registration</h2>
                   <errors-and-messages :errors="errors"></errors-and-messages>
-                   <div class="form-group">
+                  <div class="form-group">
                       <div class="row">
                         <div class="col-10 col-sm-4 col-md-4 col-lg-4">
                             <label for="name">Prefix name</label>
@@ -18,48 +18,63 @@
                         </div>
                       </div>
                   </div>
-                  <div class="form-group">
-                     <div class="row">
-                        <div class="form-group col-sm-8 col-md-8 col-lg-8">
-                              <label for="name">First name</label>
-                              <input type="text" class="form-control" name="name" id="name" v-model="form.firstname" required />
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-lg-4">
-                           <label for="name">Suffix name</label>
-                           <input type="text" class="form-control" name="name" id="name" v-model="form.suffixname" />
-                        </div>
+
+                  <div class="row">
+                     <div class="form-group col-sm-8 col-md-8 col-lg-8">
+                           <label for="name">First name</label>
+                           <input type="text" class="form-control" name="name" id="name" v-model="form.firstname" required />
+                     </div>
+                     <div class="form-group col-sm-4 col-md-4 col-lg-4">
+                        <label for="name">Suffix name</label>
+                        <input type="text" class="form-control" name="name" id="name" v-model="form.suffixname" />
                      </div>
                   </div>
-
+            
                   <div class="form-group">
                      <label for="name">Middle name</label>
                      <input type="text" class="form-control" name="name" id="name" v-model="form.middlename" />
                   </div>
+
                   <div class="form-group">
                      <label for="name">Last name</label>
                      <input type="text" class="form-control" name="name" id="name" v-model="form.lastname" required />
                   </div>
+
                   <div class="form-group">
                      <label for="name">Username</label>
                      <input type="text" class="form-control" name="name" id="name" v-model="form.username" />
                   </div>
+
                   <div class="form-group">
                      <label for="email">Email</label>
                      <input type="text" class="form-control" name="email" id="email" v-model="form.email" required />
                   </div>
+
                   <div class="form-group">
                      <label for="password">Password</label>
                      <input type="password" class="form-control" name="password" id="password" v-model="form.password" required />
                   </div>
+
                   <div class="form-group">
                      <label for="password">Re-type Password</label>
                      <input type="password" class="form-control" name="password" id="password" v-model="form.confirm_password" required />
                   </div>
-                 <div class="form-group">
-                    <label for="image">Photo</label>
-                    <input type="file" id="image" name="image" class="form-control" @change="selectFile">
-                </div>
-                  <input type="submit" class="btn btn-primary btn-block" value="Register" />
+                  <div class="row">
+                     <div class="form-group col-12 col-sm-7 col-md-7 col-lg-7">
+                        <label for="image">Photo</label>
+                        <input type="file" id="image" name="image" class="form-control" @change="selectFile">
+                     </div>
+                     <div class="col-12 col-sm-5 col-md-5 col-lg-5">
+                        <label for="name">User type</label>
+                        <select name="prefixname" class="form-control" v-model="form.type">
+                           <option value="User">User</option>
+                           <option value="Admin">Admin</option>
+                        </select>
+                     </div>
+                  </div>
+                 
+
+                <input type="submit" class="btn btn-primary btn-block" value="Register" />
                </form>
          </div>
       </div>
@@ -95,6 +110,7 @@
                confirm_password: null,
                photo:null,
                password: null,
+               type: null,
                _token: usePage().props.value.csrf_token
          });
          const photoPreview = null;

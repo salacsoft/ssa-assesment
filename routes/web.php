@@ -18,7 +18,7 @@ use App\Http\Controllers\Auth\AuthController;
 */
 Route::get("/", function(){
     return Inertia::render("Home");
-})->name("home");
+})->name("home")->middleware("auth");
 Route::get("login", [AuthController::class, "showLoginForm"])->name("showLoginForm")->middleware("guest");
 Route::post("login", [AuthController::class, "authenticate"])->name("login");
 Route::post("logout", [AuthController::class, "logout"])->name("logout");
@@ -29,4 +29,5 @@ Route::post("register", [UserController::class, "register"])->name("register");
 Route::get("users", [UserController::class, "showUsers"])->name("showUsers");
 Route::get("users/{id}/edit", [UserController::class, "editUser"])->name("editUser");
 Route::get("users/{id}", [UserController::class, "getUser"])->name("showUser");
+Route::redirect('/', 'users');
 

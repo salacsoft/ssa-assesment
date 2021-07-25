@@ -9,26 +9,13 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item active">
-                       <inertia-link :href="$route('showUsers')" class="nav-link">
-                           <button class="btn btn-primary text-white">Users</button>
-                        </inertia-link>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="navbar-collapse collapse order-3 dual-collapse2">
+            <div class="navbar-collapse collapse order-3 dual-collapse2" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item" v-if="!user">
-                        <inertia-link :href="$route('showLoginForm')" class="nav-link">Login</inertia-link>
-                    </li>
-                    <li class="nav-item" v-if="!user">
-                        <inertia-link :href="$route('showRegisterForm')" class="nav-link">Register</inertia-link>
+                        <inertia-link :href="$route('showLoginForm')" class="nav-link btn btn-warning text-white">Login</inertia-link>
                     </li>
                     <li class="nav-item" v-if="user">
-                        <span class="navbar-text" v-if="user">
+                        <span class="navbar-text text-white" v-if="user">
                            <img :src="user.avatar" alt="profile" class="rounded-circle" width="30" height="30">
                            {{user.fullname}}
                         </span>
