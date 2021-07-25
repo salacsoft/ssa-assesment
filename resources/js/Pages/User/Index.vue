@@ -18,7 +18,7 @@
          </div>
          <div class="mt-2">
             <table class="table table-striped">
-               <thead class="thead-light">
+               <thead class="thead-dark">
                   <tr>
                      <th>Photo</th>
                      <th>Name</th>
@@ -34,9 +34,9 @@
                      <td>{{user.username}}</td>
                      <td>{{user.email}}</td>
                      <td>
-                        <inertia-link :href="`/users/${user.id}`" class="btn btn-sm btn-success mr-1">View</inertia-link>
-                        <inertia-link :href="`/users/${user.id}/edit`" class="btn btn-sm btn-warning mr-1">Edit</inertia-link>
-                        <inertia-link :href="`/users/${user.id}`" class="btn btn-sm btn-danger">Remove</inertia-link>
+                        <inertia-link :href="`/users/${user.id}`"  title="Click to view information" class="btn btn-sm btn-success mr-1"><i class="fas fa-eye"></i></inertia-link>
+                        <inertia-link :href="`/users/${user.id}/edit`"  title="Click to Edit User Information" class="btn btn-sm btn-warning mr-1"><i class="fas fa-edit"></i></inertia-link>
+                        <button @click="removeUser(user)"  title="Click to remove user" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                      </td>
                   </tr>
                </tbody>
@@ -94,10 +94,23 @@
             const users = computed(() => usePage().props.value.users);
             const numberLinks = users.value.links.filter((v, i) => i > 0 && i < users.value.links.length - 1);
             console.log("users", users.value);
-      
+
+            function removeUser(user)
+            {
+               swal({
+                  title: 'Are you sure?',
+                  text: `${user.fullname } will remove from the active list of users`,
+                  icon: 'warning',
+                  buttons: ["Cancel", "Yes!"],
+               }).then(function(value) {
+                  if (value) {
+                        Inertia.delete(route('softDeleteUser',{id: user.id}));
+                  }
+               });
+            }
 
             return {
-                params, users, numberLinks
+                params, users, numberLinks, removeUser
             }
         }
     }
