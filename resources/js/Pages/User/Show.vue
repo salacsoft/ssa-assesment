@@ -11,7 +11,7 @@
                <div class="card-body">
                   <div class="form-group">
                      <label for="name">Name</label>
-                     <input type="text" class="form-control" v-model="user.fullname">
+                     <input type="text" class="form-control" v-model="user.fullname" readonly>
                   </div>
                </div>
             </div>
@@ -19,18 +19,22 @@
                <div class="card-body">
                  <div class="form-group">
                      <label for="name">Email</label>
-                     <input type="text" class="form-control" v-model="user.email">
+                     <input type="text" class="form-control" v-model="user.email" readonly>
                   </div>
                   <div class="form-group">
                      <label for="name">Username</label>
-                     <input type="text" class="form-control" v-model="user.username">
+                     <input type="text" class="form-control" v-model="user.username" readonly>
+                  </div>
+                  <div class="form-group">
+                     <label for="name">User type</label>
+                     <input type="text" class="form-control" v-model="user.type" readonly>
                   </div>
                </div>
             </div>
 
             <div class="row justify-content-between mt-3">
                <div class="col-6 col-sm-3 col-md-3 col-lg-3">
-                  <button class="btn btn-secondary form-control">Back</button>
+                  <button class="btn btn-secondary form-control" @click="back">Back</button>
                </div>
                <div class="col-6 col-sm-4 col-md-4 col-lg-3">
                   <inertia-link :href="$route('editUser', user.id)" class="btn btn-warning form-control">Edit info.</inertia-link>
@@ -67,9 +71,12 @@
                Inertia.get(route('editUser'), form);
          }
 
+         function back(){
+            window.history.back();
+         }
 
          return {
-               edit, user
+               edit, user, back
          }
       }
    }

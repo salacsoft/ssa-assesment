@@ -31,7 +31,7 @@ class UserRequest extends FormRequest
             "email" => "required|unique:users,email",
             "password" => "required|min:4",
             "confirm_password" => "required|same:password",
-            "photo" => "sometimes|mimes:jpeg,png,jpg,gif,svg"
+            "photo" => "nullable|mimes:jpeg,png,jpg,gif,svg"
         ];
     }
 }

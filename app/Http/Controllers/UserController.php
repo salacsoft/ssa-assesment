@@ -60,9 +60,12 @@ class UserController extends Controller
     public function showUsers(Request $request)
     {
         $id = Auth::user()->id;
+        $type = Auth::user()->type;
+
         $users = $this->user
+            ->checkUserType($type)
             ->where("id", "!=", $id)
-            ->orderBy('id','DESC')->paginate(10);
+            ->orderBy('id','DESC')->paginate(5);
         return Inertia::render('User/Index', [
             "users" => $users
         ]);
