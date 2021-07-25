@@ -5,21 +5,10 @@
          <div class="row mt-2 container">
              <errors-and-messages :errors="errors"></errors-and-messages>
          </div>
-         <div class="row mt-3 justify-content-between">
-           <!-- left side -->
-            <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-              <div class="row justify-content-start">
-                 <div class=" col-12 col-sm-8 col-md-8 col-lg-5">
-                    <inertia-link :href="$route('showRegisterForm')" class="btn btn-outline-primary form-control">
-                       Create New User
-                     </inertia-link>
-                 </div>
-               </div>
-           </div>
-         </div>
-         <div class="mt-2">
+      
+         <div class="mt-3">
             <div class="row container justify-content-center">
-               <h5>Active Users</h5>
+               <h5>InActive Users</h5>
             </div>
             <table class="table table-striped">
                <thead class="thead-dark">
@@ -28,6 +17,7 @@
                      <th>Name</th>
                      <th>Username</th>
                      <th>Email</th>
+                     <th>Date Deleted</th>
                      <th>Action</th>
                   </tr>
                </thead>
@@ -37,10 +27,10 @@
                      <td>{{user.fullname}}</td>
                      <td>{{user.username}}</td>
                      <td>{{user.email}}</td>
+                     <td>{{user.deleted_at}}</td>
                      <td>
-                        <inertia-link :href="`/users/${user.id}`"  title="Click to view information" class="btn btn-sm btn-success mr-1"><i class="fas fa-eye"></i></inertia-link>
-                        <inertia-link :href="`/users/${user.id}/edit`"  title="Click to Edit User Information" class="btn btn-sm btn-warning mr-1"><i class="fas fa-edit"></i></inertia-link>
-                        <button @click="removeUser(user)"  title="Click to remove user" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                        <button @click="restoreUser(user)"  title="Click to restore the user " class="btn btn-sm btn-warning mr-1"><i class="fas fa-undo"></i></button>
+                        <button @click="deleteUser(user)"  title="Click to delete permanently the user" class="btn btn-sm btn-danger"><i class="fas fa-user-slash"></i></button>
                      </td>
                   </tr>
                </tbody>
@@ -99,22 +89,36 @@
             const numberLinks = users.value.links.filter((v, i) => i > 0 && i < users.value.links.length - 1);
             console.log("users", users.value);
 
-            function removeUser(user)
+            function deleteUser(user)
             {
                swal({
                   title: 'Are you sure?',
-                  text: `${user.fullname } will remove from the active list of users`,
+                  text: `${user.fullname } will remove permanently - this is irreversible would like to continue?`,
                   icon: 'warning',
                   buttons: ["Cancel", "Yes!"],
                }).then(function(value) {
                   if (value) {
-                        Inertia.delete(route('softDeleteUser',{id: user.id}));
+                        alert("delete");
+                  }
+               });
+            }
+
+            function restoreUser(user)
+            {
+               swal({
+                  title: 'Are you sure?',
+                  text: `${user.fullname } will be back to the active list of users`,
+                  icon: 'warning',
+                  buttons: ["Cancel", "Yes!"],
+               }).then(function(value) {
+                  if (value) {
+                        alert("restore");
                   }
                });
             }
 
             return {
-                params, users, numberLinks, removeUser
+                params, users, numberLinks, deleteUser, restoreUser
             }
         }
     }
