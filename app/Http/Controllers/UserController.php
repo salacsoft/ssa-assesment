@@ -160,4 +160,17 @@ class UserController extends Controller
         return Redirect::route("showDeletedUsers");
     }
 
+    /**
+     * permanently  delete user
+     * @param int id
+     * @return Vue component with soft deleted users
+     */
+    public function hardDelete(Request $request, $id)
+    {
+        $user = $this->user->withTrashed()->where("id", $id)->first();
+        $user->forceDelete();
+        $request->session()->flash('success', 'User was permanently deleted!');
+        return Redirect::route("showDeletedUsers");
+    }
+
 }

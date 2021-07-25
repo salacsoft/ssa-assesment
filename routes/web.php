@@ -33,5 +33,6 @@ Route::patch("users/{id}/edit", [UserController::class, "updateUser"])->name("up
 Route::delete("users/{id}/softdelete", [UserController::class, "softDeleteUser"])->name("softDeleteUser");
 Route::get("users/soft-deleted/lists", [UserController::class, "showDeletedUsers"])->name("showDeletedUsers");
 Route::patch("users/{id}/restore", [UserController::class, "restoreUser"])->name("restoreUser");
+Route::delete("users/{id}/hard-delete", [UserController::class, "hardDelete"])->name("hardDelete");
 Route::redirect('/', 'users');
 

@@ -98,7 +98,7 @@
                   buttons: ["Cancel", "Yes!"],
                }).then(function(value) {
                   if (value) {
-                        alert("delete");
+                         Inertia.delete(route('hardDelete',{id: user.id}));
                   }
                });
             }
