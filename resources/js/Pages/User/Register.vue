@@ -67,8 +67,8 @@
                      <div class="col-12 col-sm-5 col-md-5 col-lg-5">
                         <label for="name">User type</label>
                         <select name="prefixname" class="form-control" v-model="form.type">
-                           <option value="User">User</option>
-                           <option value="Admin">Admin</option>
+                           <option value="user">User</option>
+                           <option value="admin">Admin</option>
                         </select>
                      </div>
                   </div>

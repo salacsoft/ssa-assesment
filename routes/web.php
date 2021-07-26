@@ -16,9 +16,7 @@ use App\Http\Controllers\Auth\AuthController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get("/", function(){
-    return Inertia::render("Home");
-})->name("home")->middleware("auth");
+
 Route::get("login", [AuthController::class, "showLoginForm"])->name("showLoginForm")->middleware("guest");
 Route::post("login", [AuthController::class, "authenticate"])->name("login");
 Route::post("logout", [AuthController::class, "logout"])->name("logout");
@@ -27,12 +25,9 @@ Route::post("logout", [AuthController::class, "logout"])->name("logout");
 Route::get("register", [UserController::class, "showRegisterForm"])->name("showRegisterForm");
 Route::post("register", [UserController::class, "register"])->name("register");
 Route::get("users", [UserController::class, "showUsers"])->name("showUsers");
-Route::get("users/{id}", [UserController::class, "getUser"])->name("showUser");
+Route::get("users/{id}/get", [UserController::class, "getUser"])->name("showUser");
 Route::get("users/{id}/edit", [UserController::class, "editUser"])->name("editUser");
 Route::patch("users/{id}/edit", [UserController::class, "updateUser"])->name("updateUser");
-Route::delete("users/{id}/softdelete", [UserController::class, "softDeleteUser"])->name("softDeleteUser");
-Route::get("users/soft-deleted/lists", [UserController::class, "showDeletedUsers"])->name("showDeletedUsers");
-Route::patch("users/{id}/restore", [UserController::class, "restoreUser"])->name("restoreUser");
-Route::delete("users/{id}/hard-delete", [UserController::class, "hardDelete"])->name("hardDelete");
+Route::softDeletes();
 Route::redirect('/', 'users');
 

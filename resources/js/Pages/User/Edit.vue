@@ -118,6 +118,7 @@
                photo:null,
                password: null,
                type:null,
+               _method: "PATCH",
                _token: usePage().props.value.csrf_token
          });
          const photoPreview = null;
@@ -126,14 +127,14 @@
          const user  = usePage().props.value.user;
          
          Object.keys(form).forEach(key => {
-            if (user.hasOwnProperty(key)) {
+            if (key !== "photo" && key != "_method") {
                form[key] = user[key];
             }
-            form.photo = null;
          });
 
          function submit() {
-               Inertia.patch(route('updateUser',{id: user.id}), form);
+               console.log("form", form);
+               Inertia.post(route('updateUser',{id: user.id}), form);
          }
 
          function selectFile($event) {

@@ -64,8 +64,9 @@ class UserService implements UserServiceInterface
     */
    public function list(int $pageLength = 5)
    {
-      $id = Auth::user()->id;
-      $type = Auth::user()->type;
+
+      $id = Auth::user()->id ?? 0 ;
+      $type = Auth::user()->type ?? "user";
 
       $users = $this->model
             ->checkUserType($type)
@@ -183,6 +184,12 @@ class UserService implements UserServiceInterface
    public function getFillable()
    {
       return $this->model->getFillable();
+   }
+
+
+   public function getBy($column, $value)
+   {
+      return $this->model->where($column, "=", $value);
    }
 
 }

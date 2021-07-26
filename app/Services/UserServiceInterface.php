@@ -9,7 +9,7 @@ interface UserServiceInterface
 
    public function rules($id = null);
 
-   public function list();
+   public function list(int $pageLength = 5);
 
    public function store(array $attributes);
 
@@ -19,7 +19,7 @@ interface UserServiceInterface
 
    public function destroy($id);
 
-   public function listTrashed();
+   public function listTrashed(int $pageLength = 5);
 
    public function restore($id);
 
@@ -28,5 +28,7 @@ interface UserServiceInterface
    public function upload(UploadedFile $file, $filename);
 
    public function getFillable();
+
+   public function getBy($column, $value);
 
 }

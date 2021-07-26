@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
@@ -31,7 +32,7 @@ class UserRequest extends FormRequest
             "email" => "required|unique:users,email,". $this->id ,
             "password" => "required|min:4",
             "confirm_password" => "required|same:password",
-            "photo" => "nullable|sometimes|mimes:jpeg,png,jpg,gif,svg"
+            "photo" => "nullable|mimes:jpeg,png,jpg,gif,svg"
         ];
     }
 }
