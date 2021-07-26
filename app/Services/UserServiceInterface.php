@@ -31,4 +31,15 @@ interface UserServiceInterface
 
    public function getBy($column, $value);
 
+   public function saveDetails($payload);
+
+   public function saveFullname($user);
+
+   public function saveGender($user);  
+
+   public function saveAvatar($user);
+   
+   public function saveMiddleInitial($user);
+
+
 }

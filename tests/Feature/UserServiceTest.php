@@ -26,7 +26,7 @@ class UserServiceTest extends TestCase
 
     public function setUp(): void
     {
-        Parent::setUp();
+        parent::setUp();
         $this->setupFaker();
     }
 
