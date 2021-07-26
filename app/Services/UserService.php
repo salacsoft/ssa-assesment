@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Detail;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Services\UserServiceInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +19,7 @@ class UserService implements UserServiceInterface
     * @var App\User
     */
    protected $model;
+   protected $details;
 
    /**
     * The request instance.
@@ -31,9 +34,10 @@ class UserService implements UserServiceInterface
     * @param \App\User                $model
     * @param \Illuminate\Http\Request $request
     */
-   public function __construct(User $model, Request $request)
+   public function __construct(User $model, Detail $details, Request $request)
    {
       $this->model = $model;
+      $this->details = $details;
       $this->request = $request;
    }
 
@@ -187,9 +191,105 @@ class UserService implements UserServiceInterface
    }
 
 
+   /**
+    * @param string column name
+    * @param string value
+    */
    public function getBy($column, $value)
    {
       return $this->model->where($column, "=", $value);
+   }
+
+
+   /**
+    * user detail information
+    * @param array
+    */
+   public function saveDetails($payload)
+   {
+      $user = $this->find($payload["id"]);
+      $this->saveFullname($user);
+      $this->saveGender($user);
+      $this->saveAvatar($user);
+      $this->saveMiddleInitial($user);
+   }
+
+   public function saveFullname($user)
+   {
+      $data = [ 
+         "key_name" => "Full name",
+         "value" => $user->fullname,
+         "type" => "bio",
+         "user_id" => $user->id
+      ];
+      $this->details->updateOrInsert([
+         "key_name" => "Full name",
+         "user_id" => $user->id
+      ], $data);
+
+   }
+
+   public function saveGender($user)
+   {
+
+      switch($user->prefixname)
+      {
+         case "Mr":
+            $gender = "Male";
+            break;
+         case "Mrs":
+            $gender = "Female";
+            break;
+         case "Ms":
+            $gender = "Female";
+            break;
+         default:
+            $gender = "Unknown";
+      }
+
+      $data = [ 
+         "key_name" => "Gender",
+         "value" => $gender,
+         "type" => "bio",
+         "user_id" => $user->id
+      ];
+
+      $this->details->updateOrInsert([
+         "key_name" => "Gender",
+         "user_id" => $user->id
+      ], $data);
+
+   }
+
+   public function saveAvatar($user)
+   {
+      $data = [ 
+         "key_name" => "Avatar",
+         "value" => $user->photo,
+         "type" => "bio",
+         "user_id" => $user->id
+      ];
+
+      $this->details->updateOrInsert([
+         "key_name" => "Avatar",
+         "user_id" => $user->id
+      ], $data);
+
+   }
+
+   public function saveMiddleInitial($user)
+   {
+      $data = [ 
+         "key_name" => "Middle Initial",
+         "value" => $user->middleinitial,
+         "type" => "bio",
+         "user_id" => $user->id
+      ];
+
+      $this->details->updateOrInsert([
+         "key_name" => "Middle Initial",
+         "user_id" => $user->id
+      ], $data);
    }
 
 }
