@@ -17,17 +17,17 @@ use App\Http\Controllers\Auth\AuthController;
 |
 */
 
-Route::get("login", [AuthController::class, "showLoginForm"])->name("showLoginForm")->middleware("guest");
-Route::post("login", [AuthController::class, "authenticate"])->name("login");
-Route::post("logout", [AuthController::class, "logout"])->name("logout");
+Route::get("login", [AuthController::class, "login"])->name("auth.login")->middleware("guest");
+Route::post("login", [AuthController::class, "authenticate"])->name("auth.authenticate");
+Route::post("logout", [AuthController::class, "logout"])->name("auth.logout");
 
 
-Route::get("register", [UserController::class, "showRegisterForm"])->name("showRegisterForm");
-Route::post("register", [UserController::class, "register"])->name("register");
-Route::get("users", [UserController::class, "showUsers"])->name("showUsers");
-Route::get("users/{id}/get", [UserController::class, "getUser"])->name("showUser");
-Route::get("users/{id}/edit", [UserController::class, "editUser"])->name("editUser");
-Route::patch("users/{id}/edit", [UserController::class, "updateUser"])->name("updateUser");
+Route::get("register", [UserController::class, "register"])->name("users.register");
+Route::post("register", [UserController::class, "create"])->name("users.create");
+Route::get("users", [UserController::class, "index"])->name("users.index");
+Route::get("users/{id}/show", [UserController::class, "show"])->name("users.show");
+Route::get("users/{id}/edit", [UserController::class, "edit"])->name("users.edit");
+Route::patch("users/{id}/update", [UserController::class, "update"])->name("users.update");
 Route::softDeletes();
 Route::redirect('/', 'users');
 

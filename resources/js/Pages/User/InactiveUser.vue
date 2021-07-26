@@ -98,7 +98,7 @@
                   buttons: ["Cancel", "Yes!"],
                }).then(function(value) {
                   if (value) {
-                         Inertia.delete(route('users.delete',{id: user.id}));
+                         Inertia.delete(route('users.delete',{id: user.id, force: true}));
                   }
                });
             }

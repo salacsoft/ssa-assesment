@@ -118,7 +118,8 @@
          const route = inject('$route');
          
          function submit() {
-               Inertia.post(route('register'), form);
+               if (form.photo == null) delete form.photo ;
+               Inertia.post(route('users.create'), form);
          }
 
          function selectFile($event) {

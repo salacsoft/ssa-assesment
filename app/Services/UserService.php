@@ -49,11 +49,11 @@ class UserService implements UserServiceInterface
          "prefixname" => "sometimes|in:Mr,Mrs,Ms",
          "firstname" => "required",
          "lastname" => "required",
-         "username" => "required|unique:users,username",
-         "email" => "required|unique:users,email",
+         "username" => "required|unique:users,username,". $id,
+         "email" => "required|unique:users,email,". $id ,
          "password" => "required|min:4",
          "confirm_password" => "required|same:password",
-         "photo" => "nullable|mimes:jpeg,png,jpg,gif,svg"
+         "photo" => "nullable|mimes:jpeg,png,jpg,gif,svg|max:300"
       ];
    }
 

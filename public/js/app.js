@@ -14902,7 +14902,7 @@ __webpack_require__.r(__webpack_exports__);
     var route = (0,vue__WEBPACK_IMPORTED_MODULE_4__.inject)('$route');
 
     function submit() {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.post(route('login'), form);
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.post(route('auth.authenticate'), form);
     }
 
     return {
@@ -14996,8 +14996,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
 
     function submit() {
-      console.log("form", form);
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post(route('updateUser', {
+      if (form.photo == null) delete form.photo;
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post(route('users.update', {
         id: user.id
       }), form);
     }
@@ -15086,7 +15086,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (value) {
         if (value) {
           _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.delete(route('users.delete', {
-            id: user.id
+            id: user.id,
+            force: true
           }));
         }
       });
@@ -15172,7 +15173,7 @@ __webpack_require__.r(__webpack_exports__);
         buttons: ["Cancel", "Yes!"]
       }).then(function (value) {
         if (value) {
-          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.delete(route('users.destroy', {
+          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.delete(route('users.delete', {
             id: user.id
           }));
         }
@@ -15241,7 +15242,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var route = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('$route');
 
     function submit() {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post(route('register'), form);
+      if (form.photo == null) delete form.photo;
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post(route('users.create'), form);
     }
 
     function selectFile($event) {
@@ -15304,7 +15306,7 @@ __webpack_require__.r(__webpack_exports__);
     var user = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.usePage)().props.value.user;
 
     function edit() {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.get(route('editUser'), form);
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.get(route('users.edit'), form);
     }
 
     function back() {
@@ -16116,7 +16118,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   }, null, 8
   /* PROPS */
   , ["errors"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" left side "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-    href: _ctx.$route('showRegisterForm'),
+    href: _ctx.$route('users.register'),
     "class": "btn btn-outline-primary form-control"
   }, {
     "default": _withId(function () {
@@ -16146,7 +16148,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-      href: "/users/".concat(user.id, "/get"),
+      href: "/users/".concat(user.id, "/show"),
       title: "Click to view information",
       "class": "btn btn-sm btn-success mr-1"
     }, {
@@ -16704,7 +16706,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       return $setup.back && $setup.back.apply($setup, arguments);
     })
   }, "Back")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-    href: _ctx.$route('editUser', $setup.user.id),
+    href: _ctx.$route('users.edit', $setup.user.id),
     "class": "btn btn-warning form-control"
   }, {
     "default": _withId(function () {
@@ -16810,7 +16812,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_inertia_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("inertia-link");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("header", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("nav", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-    href: _ctx.$route('showLoginForm'),
+    href: _ctx.$route('auth.login'),
     "class": "nav-link"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -16822,7 +16824,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href"]), _hoisted_3, $setup.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("ul", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("li", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-    href: _ctx.$route('showUsers'),
+    href: _ctx.$route('users.index'),
     "class": "nav-link text-white"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -16846,7 +16848,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href"])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("ul", _hoisted_11, [!$setup.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("li", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-    href: _ctx.$route('showLoginForm'),
+    href: _ctx.$route('auth.login'),
     "class": "nav-link btn btn-warning text-white"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -16868,7 +16870,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.user.fullname), 1
   /* TEXT */
   )])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-    href: _ctx.$route('logout'),
+    href: _ctx.$route('auth.logout'),
     as: "button",
     method: "post",
     "class": "nav-link logout-link",
