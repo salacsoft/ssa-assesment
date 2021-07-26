@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Detail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -112,7 +113,7 @@ class User extends Authenticatable
 
     public function details()
     {
-        return $this->hasMany(Detail::class, "user_id");
+        return $this->hasMany(Detail::class);
     }
 
 }
