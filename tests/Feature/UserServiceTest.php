@@ -76,7 +76,7 @@ class UserServiceTest extends TestCase
         ];
 
         // Actions
-        $response = $this->post("register", $payload);
+        $response = $this->post(route('users.create'), $payload);
         
         $user = UserServiceInterface::getBy("email", $payload["email"])->first();  
         // Assertions
@@ -94,7 +94,7 @@ class UserServiceTest extends TestCase
         $data = User::factory()->create();
  
         // Actions
-        $response = $this->get("users/". $data->id ."/get")
+        $response = $this->get(route("users.show", ["id" => $data->id]))
                 ->assertInertia(fn (Assert $page) => $page
                 ->component('User/Show')
                 ->has('user'));
@@ -129,7 +129,7 @@ class UserServiceTest extends TestCase
         ];
 
         // Actions
-        $response = $this->json("patch", "users/". $data->id ."/edit", $payload);
+        $response = $this->patch(route("users.update", ["id" => $data->id]), $payload);
         $user = UserServiceInterface::getBy("email", $payload["email"])->first();
         // Assertions
         $this->assertEquals($payload["firstname"], $user->firstname);
@@ -146,9 +146,12 @@ class UserServiceTest extends TestCase
 	    // Arrangements
         $data = User::factory()->create();
     	// Actions
-        $response = $this->json("delete", "users/". $data->id ."/destroy");
+        $response = $this->delete(route("users.delete", ["id" => $data->id]));
+        $isNull = UserServiceInterface::getBy("id", $data->id)->first();  
+        $notNull = UserServiceInterface::getBy("id", $data->id)->withTrashed()->first();  
 	    // Assertions
-        $response->assertRedirect('users');
+        $this->assertNull($isNull);
+        $this->assertNotNull($notNull);
         $response->assertSessionHasNoErrors();
     }
 
@@ -162,9 +165,8 @@ class UserServiceTest extends TestCase
         $data = User::factory()->create();
         $this->json("delete", "users/". $data->id ."/destroy");
         
-       
 	    // Actions
-        $response = $this->get("users/trashed")
+        $response = $this->get(route("users.trashed"))
             ->assertInertia(fn (Assert $page) => $page
             ->component('User/InactiveUser')
             ->has('users'));
@@ -172,6 +174,7 @@ class UserServiceTest extends TestCase
         $user = UserServiceInterface::listTrashed();
 
 	    // Assertions
+        $this->assertNotNull($user);
         $response->assertOk();
         $response->assertSessionHasNoErrors();
 
@@ -187,7 +190,8 @@ class UserServiceTest extends TestCase
     {
         // Arrangements
         $data = User::factory()->create();
-        $this->json("delete", "users/". $data->id ."/destroy");
+        $response = $this->delete(route("users.delete", ["id" => $data->id]));
+
         // Actions
         $response = $this->json("patch", "users/". $data->id ."/restore");
         // Assertions
@@ -202,11 +206,18 @@ class UserServiceTest extends TestCase
     public function it_can_permanently_delete_a_soft_deleted_user()
     {
         // Arrangements
-        $data = User::factory()->create();
-        $this->json("delete", "users/". $data->id ."/destroy");
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $this->json("delete", "users/". $user1->id ."/destroy");
+
         // Actions
-        $response = $this->json("delete", "users/". $data->id ."/delete");
+        $response = $this->delete(route("users.delete", ["id" => $user1->id, "force" => true]));
+        $isNull = UserServiceInterface::getBy("id", $user1->id)->withTrashed()->first();  
+        $notNull = UserServiceInterface::getBy("id", $user2->id)->withTrashed()->first();  
+        
         // Assertions
+        $this->assertNull($isNull);
+        $this->assertNotNull($notNull);
         $response->assertRedirect('users/trashed');
         $response->assertSessionHasNoErrors();
     }
@@ -231,9 +242,8 @@ class UserServiceTest extends TestCase
         ];
 
         // Actions
-        $response = $this->post("register", $payload);
+        $response = $this->post(route("users.create"), $payload);
         $user = UserServiceInterface::getBy("email", $payload["email"])->first();
-
         Storage::disk('public')->assertExists($payload["username"].'.jpg');
         Storage::disk('public')->assertMissing('Missing.jpg');
         $response->assertSessionHasNoErrors();

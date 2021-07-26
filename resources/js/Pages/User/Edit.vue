@@ -133,8 +133,8 @@
          });
 
          function submit() {
-               console.log("form", form);
-               Inertia.post(route('updateUser',{id: user.id}), form);
+               if (form.photo == null) delete form.photo ;
+               Inertia.post(route('users.update',{id: user.id}), form);
          }
 
          function selectFile($event) {

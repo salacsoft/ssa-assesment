@@ -50,10 +50,9 @@ class RouteServiceProvider extends ServiceProvider
         });
 
        Route::macro('softDeletes', function(){
-            Route::get("users/trashed", [UserController::class, "showDeletedUsers"])->name("users.trashed");
-            Route::patch("users/{id}/restore", [UserController::class, "restoreUser"])->name("users.restore");
-            Route::delete("users/{id}/destroy", [UserController::class, "softDeleteUser"])->name("users.destroy");
-            Route::delete("users/{id}/delete", [UserController::class, "hardDelete"])->name("users.delete");
+            Route::get("users/trashed", [UserController::class, "allTrashed"])->name("users.trashed");
+            Route::patch("users/{id}/restore", [UserController::class, "restore"])->name("users.restore");
+            Route::delete("users/{id}/delete", [UserController::class, "delete"])->name("users.delete");
        });
         
     }

@@ -52,7 +52,7 @@
             const route = inject('$route');
 
             function submit() {
-                Inertia.post(route('login'), form);
+                Inertia.post(route('auth.authenticate'), form);
             }
 
             return {

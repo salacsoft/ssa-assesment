@@ -22,7 +22,7 @@ class UserController extends Controller
     }
 
 
-    public function showRegisterForm()
+    public function register()
     {
         return Inertia::render('User/Register');
     }
@@ -32,8 +32,9 @@ class UserController extends Controller
      * @param App\Http\Requests\UserRequest;;
      * @return jsonResponse
      */
-    public function register(UserRequest $request)
-    {
+    public function create(UserRequest $request)
+    {   
+        Log::info($request->all());
         $payload = $request->only($this->user->getFillable());
         if ($request->photo){
             $payload["photo"] = $this->user->upload($request->file('photo'), $payload["username"]);
@@ -41,7 +42,7 @@ class UserController extends Controller
 
         $this->user->store($payload);
         $request->session()->flash('success', 'User Registered Successfully!');
-        return Redirect::route("showUsers");
+        return Redirect::route("users.index");
     }
 
 
@@ -58,7 +59,7 @@ class UserController extends Controller
     // }
 
 
-    public function showUsers(Request $request)
+    public function index(Request $request)
     {
         $users = $this->user->list();
         return Inertia::render('User/Index', [
@@ -71,7 +72,7 @@ class UserController extends Controller
      * get one user
      * @param int $id
      */
-    public function getUser($id)
+    public function show($id)
     {
         $user = $this->user->find($id);
         return Inertia::render('User/Show', [
@@ -83,7 +84,7 @@ class UserController extends Controller
      * get one user
      * @param int $id
      */
-    public function editUser($id)
+    public function edit($id)
     {
         $user = $this->user->find($id);
         return Inertia::render('User/Edit', [
@@ -97,7 +98,7 @@ class UserController extends Controller
      * @param App\Http\Requests\UserRequest;
      * @param int $id
      */
-    public function updateUser(UserRequest $request, $id)
+    public function update(UserRequest $request, $id)
     {
         $payload = $request->only($this->user->getFillable());
         if ($request->file("photo")){
@@ -106,7 +107,7 @@ class UserController extends Controller
         }
         $update = $this->user->update($id, $payload);
         $request->session()->flash('success', 'User updated Successfully!');
-        return Redirect::route("showUsers");
+        return Redirect::route("users.index");
     }
 
 
@@ -114,18 +115,23 @@ class UserController extends Controller
      * get one user
      * @param int $id
      */
-    public function softDeleteUser(Request $request, $id)
+    public function delete(Request $request, $id)
     {
-        $this->user->destroy($id);
-        $request->session()->flash('success', 'User move to inactive users (soft deleted)');
-        return Redirect::route("showUsers");
+        if ($request->force) {
+            $this->user->delete($id);
+            $request->session()->flash('success', 'User was permanently deleted!');
+        }else {
+            $this->user->destroy($id);
+            $request->session()->flash('success', 'User move to inactive users (soft deleted)');
+        }
+        return Redirect::route("users.trashed");
     }
 
 
     /**
      * display all soft deleted users
      */
-    public function showDeletedUsers()
+    public function allTrashed()
     {
         $users = $this->user->listTrashed();
         return Inertia::render('User/InactiveUser', [
@@ -139,23 +145,23 @@ class UserController extends Controller
      * @param int id
      * @return Vue component with soft deleted users
      */
-    public function restoreUser(Request $request, $id)
+    public function restore(Request $request, $id)
     {
         $this->user->restore($id);
         $request->session()->flash('success', 'User successfuly restored and back to active users');
         return Redirect::route("users.trashed");
     }
 
-    /**
-     * permanently  delete user
-     * @param int id
-     * @return Vue component with soft deleted users
-     */
-    public function hardDelete(Request $request, $id)
-    {
-        $this->user->delete($id);
-        $request->session()->flash('success', 'User was permanently deleted!');
-        return Redirect::route("users.trashed");
-    }
+    // /**
+    //  * permanently  delete user
+    //  * @param int id
+    //  * @return Vue component with soft deleted users
+    //  */
+    // public function hardDelete(Request $request, $id)
+    // {
+    //     $this->user->delete($id);
+        
+    //     return Redirect::route("users.trashed");
+    // }
 
 }

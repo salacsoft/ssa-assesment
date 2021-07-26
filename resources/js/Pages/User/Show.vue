@@ -37,7 +37,7 @@
                   <button class="btn btn-secondary form-control" @click="back">Back</button>
                </div>
                <div class="col-6 col-sm-4 col-md-4 col-lg-3">
-                  <inertia-link :href="$route('editUser', user.id)" class="btn btn-warning form-control">Edit info.</inertia-link>
+                  <inertia-link :href="$route('users.edit', user.id)" class="btn btn-warning form-control">Edit info.</inertia-link>
                </div>
             </div>
          </div>
@@ -68,7 +68,7 @@
          const user  = usePage().props.value.user;
 
          function edit() {
-               Inertia.get(route('editUser'), form);
+               Inertia.get(route('users.edit'), form);
          }
 
          function back(){
