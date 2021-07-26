@@ -9,4 +9,4 @@ To check the Final Result checkout to develop branch
 * run "npm install"
 * composer "php artisan storage:link" to link the storage to public
 * run "npm run dev"
-* default email:salacsoft22@gmail.com pass: secretkey
+* default user email:salacsoft22@gmail.com pass: secretkey
