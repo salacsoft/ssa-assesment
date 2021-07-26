@@ -98,7 +98,7 @@
                   buttons: ["Cancel", "Yes!"],
                }).then(function(value) {
                   if (value) {
-                         Inertia.delete(route('hardDelete',{id: user.id}));
+                         Inertia.delete(route('users.delete',{id: user.id}));
                   }
                });
             }
@@ -112,7 +112,7 @@
                   buttons: ["Cancel", "Yes!"],
                }).then(function(value) {
                   if (value) {
-                        Inertia.patch(route('restoreUser',{id: user.id}));
+                        Inertia.patch(route('users.restore',{id: user.id}));
                   }
                });
             }

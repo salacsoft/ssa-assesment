@@ -2,23 +2,58 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Mockery;
 use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Inertia\Testing\Assert;
+use Illuminate\Http\Request;
+use App\Services\UserService;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\WithFaker;
+use Facades\App\Services\UserServiceInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 class UserServiceTest extends TestCase
 {
+
+    use WithFaker;
+
+    public function setUp(): void
+    {
+        Parent::setUp();
+        $this->setupFaker();
+    }
+
     /**
      * @test
-     * @return void
      */
-    public function it_can_return_a_paginated_list_of_users()
+    public function test_it_can_visit_user_listing_page()
     {
-	// Arrangements
+        
+        $response = $this->get("users")
+                        ->assertInertia(fn (Assert $page) => $page
+                        ->component('User/Index')
+                        ->has('users'));
 
-	// Actions
+        $response->assertOk();
+    }
 
-	// Assertions
+    /**
+     * @test
+     */
+    public function test_it_can_return_a_paginated_list_of_users()
+    {
+        $user = UserServiceInterface::list();
+        $this->assertTrue(property_exists($user, "currentPage"));
+        $this->assertTrue(property_exists($user, "total"));
+        $this->assertTrue(property_exists($user, "lastPage"));
+        $this->assertTrue(property_exists($user, "perPage"));
     }
 
     /**
@@ -27,11 +62,26 @@ class UserServiceTest extends TestCase
      */
     public function it_can_store_a_user_to_database()
     {
-	// Arrangements
+        // Arrangements
+        $payload = [
+            'prefixname' => "Mr",
+            'firstname' => $this->faker->firstName(),
+            'middlename' => "Evangelio",
+            'lastname' => $this->faker->lastName(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'username' => $this->faker->unique()->safeEmail(),
+            'password' => 'password', // password
+            'confirm_password' => 'password',
+            '_token' => csrf_token()
+        ];
 
-	// Actions
-
-	// Assertions
+        // Actions
+        $response = $this->post("register", $payload);
+        
+        $user = UserServiceInterface::getBy("email", $payload["email"])->first();  
+        // Assertions
+        $this->assertEquals($user["email"], $payload["email"]);
+        $response->assertRedirect('users');
     }
 
     /**
@@ -40,11 +90,21 @@ class UserServiceTest extends TestCase
      */
     public function it_can_find_and_return_an_existing_user()
     {
-	// Arrangements
+        // Arrangements
+        $data = User::factory()->create();
+ 
+        // Actions
+        $response = $this->get("users/". $data->id ."/get")
+                ->assertInertia(fn (Assert $page) => $page
+                ->component('User/Show')
+                ->has('user'));
 
-	// Actions
+        $user = UserServiceInterface::getBy("email", $data->email)->first();
 
-	// Assertions
+        // Assertions
+        $this->assertEquals($data->email, $user->email);
+        $response->assertOk();
+        $response->assertSessionHasNoErrors();
     }
 
     /**
@@ -53,11 +113,28 @@ class UserServiceTest extends TestCase
      */
     public function it_can_update_an_existing_user()
     {
-	// Arrangements
+        // Arrangements
+        $data = User::factory()->create();
 
-	// Actions
+        $payload = [
+            'prefixname' => "Mr",
+            'firstname' => $this->faker->firstName(),
+            'middlename' => "Evangelio",
+            'lastname' => $this->faker->lastName(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'username' => $this->faker->unique()->safeEmail(),
+            'password' => 'password', // password
+            'confirm_password' => 'password',
+            '_token' => csrf_token()
+        ];
 
-	// Assertions
+        // Actions
+        $response = $this->json("patch", "users/". $data->id ."/edit", $payload);
+        $user = UserServiceInterface::getBy("email", $payload["email"])->first();
+        // Assertions
+        $this->assertEquals($payload["firstname"], $user->firstname);
+        $response->assertRedirect('users');
+        $response->assertSessionHasNoErrors();
     }
 
     /**
@@ -66,11 +143,13 @@ class UserServiceTest extends TestCase
      */
     public function it_can_soft_delete_an_existing_user()
     {
-	// Arrangements
-
-	// Actions
-
-	// Assertions
+	    // Arrangements
+        $data = User::factory()->create();
+    	// Actions
+        $response = $this->json("delete", "users/". $data->id ."/destroy");
+	    // Assertions
+        $response->assertRedirect('users');
+        $response->assertSessionHasNoErrors();
     }
 
     /**
@@ -79,11 +158,25 @@ class UserServiceTest extends TestCase
      */
     public function it_can_return_a_paginated_list_of_trashed_users()
     {
-	// Arrangements
+	    // Arrangements
+        $data = User::factory()->create();
+        $this->json("delete", "users/". $data->id ."/destroy");
+        
+       
+	    // Actions
+        $response = $this->get("users/trashed")
+            ->assertInertia(fn (Assert $page) => $page
+            ->component('User/InactiveUser')
+            ->has('users'));
 
-	// Actions
+        $user = UserServiceInterface::listTrashed();
 
-	// Assertions
+	    // Assertions
+        $response->assertOk();
+        $response->assertSessionHasNoErrors();
+
+        $this->assertEquals(1, $user->currentPage());
+
     }
 
     /**
@@ -92,11 +185,14 @@ class UserServiceTest extends TestCase
      */
     public function it_can_restore_a_soft_deleted_user()
     {
-	// Arrangements
-
-	// Actions
-
-	// Assertions
+        // Arrangements
+        $data = User::factory()->create();
+        $this->json("delete", "users/". $data->id ."/destroy");
+        // Actions
+        $response = $this->json("patch", "users/". $data->id ."/restore");
+        // Assertions
+        $response->assertRedirect('users/trashed');
+        $response->assertSessionHasNoErrors();
     }
 
     /**
@@ -105,11 +201,14 @@ class UserServiceTest extends TestCase
      */
     public function it_can_permanently_delete_a_soft_deleted_user()
     {
-	// Arrangements
-
-	// Actions
-
-	// Assertions
+        // Arrangements
+        $data = User::factory()->create();
+        $this->json("delete", "users/". $data->id ."/destroy");
+        // Actions
+        $response = $this->json("delete", "users/". $data->id ."/delete");
+        // Assertions
+        $response->assertRedirect('users/trashed');
+        $response->assertSessionHasNoErrors();
     }
 
     /**
@@ -117,11 +216,27 @@ class UserServiceTest extends TestCase
      * @return void
      */
     public function it_can_upload_photo()
-    {
-	// Arrangements
+    {;
+        $payload = [
+            'prefixname' => "Mr",
+            'firstname' => $this->faker->firstName(),
+            'middlename' => "Evangelio",
+            'lastname' => $this->faker->lastName(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'username' => $this->faker->unique()->safeEmail(),
+            'password' => 'password', // password
+            'confirm_password' => 'password',
+            'photo' => UploadedFile::fake()->image('avatar.jpg'),
+            '_token' => csrf_token()
+        ];
 
-	// Actions
+        // Actions
+        $response = $this->post("register", $payload);
+        $user = UserServiceInterface::getBy("email", $payload["email"])->first();
 
-	// Assertions
+        Storage::disk('public')->assertExists($payload["username"].'.jpg');
+        Storage::disk('public')->assertMissing('Missing.jpg');
+        $response->assertSessionHasNoErrors();
+        $this->assertEquals($payload["email"], $user->email);
     }
 }

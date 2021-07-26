@@ -21,7 +21,7 @@ class CreateDefaultUser extends Migration
             "lastname" => "Salac",
             "username" => "joseph123",
             "email" => "salacsoft22@gmail.com",
-            "type" => "Admin",
+            "type" => "admin",
             "photo" => "joseph.jpg",
             "password" => "secretkey"
         ]);

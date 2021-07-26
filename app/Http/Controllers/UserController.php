@@ -40,8 +40,8 @@ class UserController extends Controller
         }
 
         $this->user->store($payload);
-        $request->session()->flash('success', 'User Registered Successfully! you can sign in now');
-        return Redirect::route("showLoginForm");
+        $request->session()->flash('success', 'User Registered Successfully!');
+        return Redirect::route("showUsers");
     }
 
 
@@ -143,7 +143,7 @@ class UserController extends Controller
     {
         $this->user->restore($id);
         $request->session()->flash('success', 'User successfuly restored and back to active users');
-        return Redirect::route("showDeletedUsers");
+        return Redirect::route("users.trashed");
     }
 
     /**
@@ -155,7 +155,7 @@ class UserController extends Controller
     {
         $this->user->delete($id);
         $request->session()->flash('success', 'User was permanently deleted!');
-        return Redirect::route("showDeletedUsers");
+        return Redirect::route("users.trashed");
     }
 
 }

@@ -14985,20 +14985,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       password: null,
       confirm_password: null,
       photo: null
-    }, _defineProperty(_reactive, "password", null), _defineProperty(_reactive, "type", null), _defineProperty(_reactive, "_token", (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.usePage)().props.value.csrf_token), _reactive));
+    }, _defineProperty(_reactive, "password", null), _defineProperty(_reactive, "type", null), _defineProperty(_reactive, "_method", "PATCH"), _defineProperty(_reactive, "_token", (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.usePage)().props.value.csrf_token), _reactive));
     var photoPreview = null;
     var route = (0,vue__WEBPACK_IMPORTED_MODULE_2__.inject)('$route');
     var user = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.usePage)().props.value.user;
     Object.keys(form).forEach(function (key) {
-      if (user.hasOwnProperty(key)) {
+      if (key !== "photo" && key != "_method") {
         form[key] = user[key];
       }
-
-      form.photo = null;
     });
 
     function submit() {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.patch(route('updateUser', {
+      console.log("form", form);
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_4__.Inertia.post(route('updateUser', {
         id: user.id
       }), form);
     }
@@ -15086,7 +15085,7 @@ __webpack_require__.r(__webpack_exports__);
         buttons: ["Cancel", "Yes!"]
       }).then(function (value) {
         if (value) {
-          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.delete(route('hardDelete', {
+          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.delete(route('users.delete', {
             id: user.id
           }));
         }
@@ -15101,7 +15100,7 @@ __webpack_require__.r(__webpack_exports__);
         buttons: ["Cancel", "Yes!"]
       }).then(function (value) {
         if (value) {
-          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.patch(route('restoreUser', {
+          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.patch(route('users.restore', {
             id: user.id
           }));
         }
@@ -15173,7 +15172,7 @@ __webpack_require__.r(__webpack_exports__);
         buttons: ["Cancel", "Yes!"]
       }).then(function (value) {
         if (value) {
-          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.delete(route('softDeleteUser', {
+          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.delete(route('users.destroy', {
             id: user.id
           }));
         }
@@ -16147,7 +16146,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-      href: "/users/".concat(user.id),
+      href: "/users/".concat(user.id, "/get"),
       title: "Click to view information",
       "class": "btn btn-sm btn-success mr-1"
     }, {
@@ -16395,13 +16394,13 @@ var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 );
 
 var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
-  value: "User"
+  value: "user"
 }, "User", -1
 /* HOISTED */
 );
 
 var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("option", {
-  value: "Admin"
+  value: "admin"
 }, "Admin", -1
 /* HOISTED */
 );
@@ -16835,7 +16834,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("li", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
-    href: _ctx.$route('showDeletedUsers'),
+    href: _ctx.$route('users.trashed'),
     "class": "nav-link text-white"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {

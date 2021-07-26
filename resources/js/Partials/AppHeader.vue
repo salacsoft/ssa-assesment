@@ -15,7 +15,7 @@
                        <inertia-link :href="$route('showUsers')" class="nav-link text-white">Active Users</inertia-link>
                     </li>
                      <li class="nav-item" >
-                       <inertia-link :href="$route('showDeletedUsers')" class="nav-link text-white">Inactive Users</inertia-link>
+                       <inertia-link :href="$route('users.trashed')" class="nav-link text-white">Inactive Users</inertia-link>
                     </li>
                 </ul>
             </div>
